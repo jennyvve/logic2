@@ -21,3 +21,22 @@ Ex.P(x) : E.x/x I 4
 | (Ex.P(x)) & uniq(x, P(x)) : copy 1
 | (Ex.P(x)) & ((Ay.Az.P(y) & P(z)) -> y = z) : and I 5,8
 ((Ex.P(x)) & uniq(x, P(x))) -> ((Ex.P(x)) & ((Ay.Az.P(y) & P(z)) -> (y = z))) : -> I 9-10
+
+
+P(x) & (Ay.P(y) -> x = y)
+| P(x) : and e1 1
+| Ex.P(x) : e.x/x i 2
+| Ay.P(y) -> x = y : and e2 1
+| P(y) -> x = y : A.y/y e 4
+|| (Ay.Az. P(y) & P(z) -> y = z)
+|| Az. P(y) & P(z) -> y = z : A.y/y e 6
+|| P(y) & P(z) -> y = z : A.z/z e 7
+||| P(y) & P(z)
+||| y = z : -> e 8,9
+|||| P(y) : and e1 9
+|||| x = y : -> e 5, 11
+||| P(y) -> x = y : -> i 11-12
+|||| with y
+|||| P(y) -> x = y : copy 13
+||| Ay.P(y) -> x = y : A.y/y i 14-15
+(Ex.P(x)) & (Ay.Az.P(y) & P(z) -> y = z) : and i 3,6
