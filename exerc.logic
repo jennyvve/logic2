@@ -8,3 +8,16 @@ Ax.(~(x = p) -> O(p,x))
 ~O(p,p) : neg i 5-7
 
 
+
+
+(Ex.P(x)) & uniq(x, P(x))
+y = z
+(Ay.Az.P(y) & P(z))
+P(x)
+Ex.P(x) : E.x/x I 4
+| (Ay.Az.P(y) & P(z)) : copy 3
+| y = z : copy 2
+(Ay.Az.P(y) & P(z)) -> y = z : -> I 6-7
+| (Ex.P(x)) & uniq(x, P(x)) : copy 1
+| (Ex.P(x)) & ((Ay.Az.P(y) & P(z)) -> y = z) : and I 5,8
+((Ex.P(x)) & uniq(x, P(x))) -> ((Ex.P(x)) & ((Ay.Az.P(y) & P(z)) -> (y = z))) : -> I 9-10
