@@ -62,3 +62,19 @@ P(y) & P(z) -> y = z : -> i 7-12
 Ay.Az.P(y) & P(z) -> y = z : A.z/z i 14-17
 (Ex.P(x)) & (Ay.Az.P(y) & P(z) -> y = z) : and i 3,18
 
+(Ex.P(x)) & (Ay.Az.P(y) & P(z) -> y = z)
+Ay.Az.P(y) & P(z) -> y = z : and e2 1
+Az.P(x) & P(z) -> x = z : A.y/x e 2
+P(x) & P(y) -> x = y : A.z/y e 3
+| P(x) & P(y)
+|| P(y) : and e2 5
+|| x = y : -> e 4,5
+P(y) -> x = y : -> i 6-7
+| with y
+| P(y) -> x = y : copy 8
+Ay.P(y) -> x = y : A.y/y i 9-10
+Ex.P(x) : and e1 1
+| with x
+| P(x)
+P(x) : E.x/x e 12,13-14
+P(x) & (Ay.(P(y) -> x = y)) : and i 15,11
