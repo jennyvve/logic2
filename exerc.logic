@@ -40,3 +40,25 @@ P(x) & (Ay.P(y) -> x = y)
 |||| P(y) -> x = y : copy 13
 ||| Ay.P(y) -> x = y : A.y/y i 14-15
 (Ex.P(x)) & (Ay.Az.P(y) & P(z) -> y = z) : and i 3,6
+
+
+P(x) & (Ay.(P(y) -> x = y))
+P(x) : and e1 1
+Ex.P(x) : e.x/x i 2
+Ay.(P(y) -> x = y) : and e2 1
+P(y) -> x = y : A.y/y e 4
+P(z) -> x = z : A.y/z e 4
+| P(y) & P(z)
+| P(y) : and e1 7
+| P(z) : and e2 7
+| x = y : -> e 5,8
+| x = z : -> e 6,9
+| y = z : = e 10,11
+P(y) & P(z) -> y = z : -> i 7-12
+| with y
+|| with z
+|| P(y) & P(z) -> y = z : copy 13
+| Az.P(y) & P(z) -> y = z : A.z/z i 15-16
+Ay.Az.P(y) & P(z) -> y = z : A.z/z i 14-17
+(Ex.P(x)) & (Ay.Az.P(y) & P(z) -> y = z) : and i 3,18
+
