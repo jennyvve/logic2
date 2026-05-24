@@ -1,0 +1,119 @@
+% !TEX program = xelatex
+\documentclass{article}
+
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{unicode-math}
+\setmonofont{DejaVu Sans Mono} % monospaced font with extensive unicode support for verbatim
+\usepackage{stmaryrd}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{forest}
+\usepackage{logicproof}
+\usepackage{ebproof}
+\usepackage{fitch}
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%% Some macros to help with the typesetting %%%%%%%%%%
+\usepackage{logic-macros}
+%%%%%% End of local macros %%%%%%%
+
+\title{Logic Homework 2}
+\author{Jenny Vermeltfoort\\
+  s3787494\\
+  Informatica%Informatica, I&E, Bioinformatica, Wiskunde, ...
+}
+
+\begin{document}
+
+%% Use var symbols by default
+\renewcommand*{\phi}{\varphi}
+\renewcommand*{\epsilon}{\varepsilon}
+\DeclareMathAlphabet\mathzapf       {T1}{pzc} {mb} {it}
+
+\maketitle
+
+\section*{Question 1}
+
+%[[\phi]]v(x) = [[\psi]]v(y,z) = 1 iff [[Ay.P(y)]]v(y) = 1 or [[Ez.R(z)]]v(z) = 1
+%                                  if min{[[P(y)]]v[y->a] | a \in |\mathzapf{M}|} = 0, then by our assumptions  [[R(x)]]v[x->a] = 1 for some a \in |\mathzapf{M}|
+%                                  iff min{[[P(y)]]v[y->a] | a \in |\mathzapf{M}|} = 1, then [[\psi]]v(y,z) = 1
+%                                  iff max{[[R(z)]]v[z->a] | a \in |\mathzapf{M}|} = 0, then by our assumptions [[P(x)]]v[x->a] = 1 for all a \in |\mathzapf{M}|
+%                                  iff max{[[R(z)]]v[z->a] | a \in |\mathzapf{M}|} = 1, then [[R(z)]]v[z->c] = 1 for some c \in |\mathzapf{M}|, then [[\psi]]v[y ->b,z -> c) = 1 for some some b \in |\mathzapf{M}|
+
+Let: $ \phi = \forall x.P(x) \lor R(x) $, $ \psi = ((\forall y.P(y)) \lor (\exists z.R(z))) $. We show that: $ \phi  \models \psi $:
+
+\begin{subequations}
+\begin{align}
+[[\phi]] = 1 &\iff [[R(x)]]v[x \longmapsto a] = 1 \text{ or } [[P(x)]]v[x \longmapsto a] = 1 \text{ for all } a \in |\mathzapf{M}|  \nonumber \\
+& \iff [[P(x)]]v[x \longmapsto a] = 0 \text{ then } [[R(x)]]v[x \longmapsto a] = 1 \text{ for all } a \in |\mathzapf{M}| \label{eqn:line-4}\\
+& \iff [[R(x)]]v[x \longmapsto a] = 0 \text{ then } [[P(x)]]v[x \longmapsto a] = 1 \text{ for all } a \in |\mathzapf{M}| \label{eqn:line-5}\\
+  \nonumber
+\end{align}
+\end{subequations}
+
+The semantic entailment is resolved by the following:
+\begin{equation*}
+\begin{split} 
+  [[\phi]]v(x) &= [[\psi]]v(y,z) = 1 \\
+    &\iff [[\forall y.P(y)]]v(y) = 1 \text{ or } [[\exists z.R(z)]]v(z) = 1 
+\end{split}
+\end{equation*}
+
+Then we go over all the cases:
+\paragraph{1)}
+if $ [[\forall y.P(y)]]v(y,z) = 1 $, then:
+\begin{equation*}
+\begin{split} 
+  [[\forall y.P(y)]]v(y,z) &= \min\{[[P(y)]]v[y \longmapsto a] | a \in |\mathzapf{M}| \} = 1 \\
+  &\iff [[P(y)]]v[y \longmapsto a] = 1 \text{ for all } a \in |\mathzapf{M}| \text{ making } [[\psi]]v[y \longmapsto a] = 1\\
+\end{split}
+\end{equation*}
+
+\paragraph{2)}
+if $ [[\forall y.P(y)]]v(y) = 0 $, then:
+\begin{equation*}
+\begin{split} 
+  [[\forall y.P(y)]]v(y) &= \min\{[[P(y)]]v[y \longmapsto a] | a \in |\mathzapf{M}| \} = 0 \\
+  &\iff [[P(y)]]v[y \longmapsto a] = 0 \text{ for some } a \in |\mathzapf{M}| \text { then } [[R(y)]]v[y \longmapsto a] = 1 \\ & \text{ : by assumption \ref{eqn:line-4}, making } [[\psi]]v[y \longmapsto a] = 1
+\end{split}
+\end{equation*}
+
+
+\paragraph{3)}
+if $ [[\exists z.R(z)]]v(z) = 1 $, then:
+\begin{equation*}
+\begin{split} 
+  [[\exists z.R(z)]]v(z) &= \max\{[[R(z)]]v[z \longmapsto a ] | a \in |\mathzapf{M}| \} = 1 \\
+  &\iff [[R(z)]]v[z \longmapsto a] = 1 \text{ for some } a \in |\mathzapf{M}| \text{ making } [[\psi]]v[z \longmapsto a] = 1\\
+\end{split}
+\end{equation*}
+
+\paragraph{4)}
+if $ [[\exists z.R(z)]]v(z) = 0 $, then:
+\begin{equation*}
+\begin{split} 
+  [[\exists z.R(z)]]v(z) &= \max\{[[R(z)]]v[z \longmapsto a ] | a \in |\mathzapf{M}| \} = 0 \\
+  &\iff [[R(z)]]v[z \longmapsto a] = 0 \text{ for all } a \in |\mathzapf{M}| \text { then } [[P(y)]]v[y \longmapsto a] = 1 \\ &\text{ : by assumption \ref{eqn:line-5}, making } [[\psi]]v[z \longmapsto a] = 1 \\
+\end{split}
+\end{equation*}
+
+We've exhausted all cases and all cases lead to  $ [[\phi]]v(x) = [[\psi]]v(y,z) = 1 $, therefore $ \phi  \models \psi $.
+
+\section*{Question 2}
+Let: $ \phi = \forall x. \forall y. P(x,y) \rightarrow P(y,x) $, $ |\mathzapf{M}| = \mathbb{N} $, $ \mathzapf{R} = \{P(m,n) = m \dot{=} n \} $, $ \ar(P) = 2 $.
+
+We show that $\phi$ is satisfiable:
+\begin{equation*}
+\begin{split}
+[[\phi]]v(x) &= \min\{[[\phi]]v[x \longmapsto a, y \longmapsto b] | a,b \in |\mathzapf{M}| \} = 1 \\
+& = \min\{[[P(x,y)]]v[x \longmapsto a, y \longmapsto b] \implies [[P(y,x)]]v[x \longmapsto a, y \longmapsto b] | a,b \in |\mathzapf{M}| \} = 1 \\
+& = \min\{\mathzapf{M}(P)(a,b) \implies \mathzapf{M}(P)(b,a) | a,b \in |\mathzapf{M}| \}  \\
+& = \min\{a \dot{=} b \implies b \dot{=} a | a,b \in |\mathzapf{M}| \} \\
+& = 1 \text{ : shown by the symmetry property of equality. }
+\end{split}
+\end{equation*}
+
+This shows that $ \models_M \phi $, therefor $ \phi $ is satisfiable.
+
+\end{document}

@@ -1,0 +1,432 @@
+\ProvidesPackage{logic-macros}
+
+\RequirePackage{xparse}
+\RequirePackage{ifthen}
+\RequirePackage{stmaryrd}
+\RequirePackage{colonequals}
+\RequirePackage{cancel}
+% \RequirePackage{centernot}
+% \RequirePackage{bbm}
+
+%% Referencing
+\NewDocumentCommand{\axref}{m}{(\text{#1})}
+
+%% Use varphi by default
+\let\oldphi\phi
+\let\oldepsilon\epsilon
+\let\oldtheta\theta
+\let\oldkappa\kappa
+\let\oldrho\rho
+\renewcommand*{\phi}{\varphi}
+\renewcommand*{\epsilon}{\varepsilon}
+\renewcommand*{\theta}{\vartheta}
+\renewcommand*{\kappa}{\varkappa}
+\renewcommand*{\rho}{\varrho}
+
+% \DeclareMathSymbol{\Alpha}{\mathalpha}{operators}{"41}
+% \DeclareMathSymbol{\Beta}{\mathalpha}{operators}{"42}
+% \DeclareMathSymbol{\Epsilon}{\mathalpha}{operators}{"45}
+% \DeclareMathSymbol{\Zeta}{\mathalpha}{operators}{"5A}
+% \DeclareMathSymbol{\Eta}{\mathalpha}{operators}{"48}
+% \DeclareMathSymbol{\Iota}{\mathalpha}{operators}{"49}
+% \DeclareMathSymbol{\Kappa}{\mathalpha}{operators}{"4B}
+% \DeclareMathSymbol{\Mu}{\mathalpha}{operators}{"4D}
+% \DeclareMathSymbol{\Nu}{\mathalpha}{operators}{"4E}
+% \DeclareMathSymbol{\Omicron}{\mathalpha}{operators}{"4F}
+% \DeclareMathSymbol{\Rho}{\mathalpha}{operators}{"50}
+% \DeclareMathSymbol{\Tau}{\mathalpha}{operators}{"54}
+% \DeclareMathSymbol{\Chi}{\mathalpha}{operators}{"58}
+% \DeclareMathSymbol{\omicron}{\mathord}{letters}{"6F}
+
+%% General notation
+\newcommand*{\N}{\mathbb{N}}
+\newcommand*{\Z}{\mathbb{Z}}
+\newcommand*{\Q}{\mathbb{Q}}
+\newcommand*{\R}{\mathbb{R}}
+\newcommand*{\Pow}{\mathcal{P}}
+\newcommand*{\from}{\colon}
+\newcommand*{\BoxOp}{\mathbin{\Box}}
+% \newcommand*{\coloncolonequals}{\Coloneqq}
+% \newcommand*{\coloncolonequals}{\vcentcolon \vcentcolon =}
+\newcommand*{\cce}{\coloncolonequals}
+% \newcommand*{\colonequals}{\coloneqq}
+\DeclarePairedDelimiter{\abs}{|}{|}
+\DeclareMathOperator{\dom}{dom}
+\DeclarePairedDelimiter{\fOrd}{[}{\rangle}
+\newcommand*{\id}{\mathrm{id}}
+\newcommand*{\comp}{\mathbin{\circ}}
+%\newcommand*{\Map}[2]{#2^{#1}}
+%\newcommand*{\MapNP}[2]{(#2)^{#1}} % Adds parentheses around second argument if needed
+\DeclarePairedDelimiterX{\Map}[2]{[}{]}{#1, #2}
+\DeclarePairedDelimiterX{\MapNP}[2]{[}{]}{#1, #2}
+\newcommand*{\Tup}[2]{#2^{#1}}
+\newcommand*{\emap}{\epsilon}
+\DeclarePairedDelimiter{\pair}{\langle}{\rangle}
+
+%% Trees
+\DeclareDocumentCommand{\Tr}{o}{%
+  \mathcal{T}\IfValueT{#1}{_{(#1)}}%
+}
+\newcommand*{\node}{\mathrm{nd}}
+\newcommand*{\leaf}{\mathrm{lf}}
+\newcommand*{\NatL}{L^{\mathrm{nat}}}
+\newcommand*{\NatB}{B^{\mathrm{nat}}}
+% \newcommand*{\NatL}{L^{N}}
+% \newcommand*{\NatB}{B^{N}}
+\newcommand*{\NTr}{\mathcal{N}}
+\newcommand*{\BinL}{L^{\mathrm{bin}}}
+\newcommand*{\BinB}{B^{\mathrm{bin}}}
+\newcommand*{\BTr}{\mathcal{B}}
+\newcommand*{\ext}[1]{\overline{#1}}
+
+%% Binary trees
+\newcommand*{\emT}{\epsilon}
+\newcommand*{\brT}{\mathrm{br}}
+\newcommand*{\substT}{\mathrm{subst}}
+
+%% Logical connectives
+\newcommand*{\bimpl}{\leftrightarrow}
+\newcommand*{\bind}[2]{#1 #2. \,}
+\newcommand*{\all}[1]{\bind{\forall}{#1}}
+% \exist{x} is usual existential quantifier ∃x. with right spacing at the end
+% \exist1{x} is unique existential
+\NewDocumentCommand{\exist}{t1 m}{%
+  \IfBooleanTF{#1}{%
+    \bind{\exists!}{#2}%
+  }{%
+    \bind{\exists}{#2}%
+  }%
+}
+%\newcommand*{\exist}[1]{\bind{\exists}{#1}}
+\newcommand*{\quant}[1]{\bind{\lozenge}{#1}}
+\newcommand*{\lequal}{\doteq}
+\newcommand{\lnequal}{\cancel{\lequal}}
+\newcommand*{\unique}[3]{\mathrm{unique}_{#1}(#2, #3)}
+
+%% Semantical truth values
+\newcommand*{\TT}{1}
+\newcommand*{\FF}{0}
+\newcommand*{\B}{\mathbb{B}}
+\newcommand*{\semImpl}{\Longrightarrow}
+\newcommand*{\sat}{\vDash}
+\newcommand*{\nsat}{\not\vDash}
+\newcommand*{\entails}{\vDash}
+\newcommand*{\nentails}{\not\vDash}
+\newcommand*{\entailsE}{\vDash^{=}}
+\NewDocumentCommand{\entail}{d() o m m}{%
+  \IfValueT{#2}{#2 \mid}%
+  #3 \entails%
+  \IfValueT{#1}{_{#1}}%
+  #4%
+}
+\NewDocumentCommand{\entailM}{o m m}{%
+  \entail(\Model)[#1]{#2}{#3}%
+}
+
+%% Scott brackets
+\DeclarePairedDelimiter{\sem}{\llbracket}{\rrbracket}
+\DeclareDocumentCommand{\semP}{s o o m}{%
+  \IfBooleanTF{#1}{%
+    \sem*{#4}%
+  }{%
+    \sem{#4}%
+  }
+  \IfValueT{#2}{_{#2}}%
+  \IfValueT{#3}{^{#3}}%
+}
+\DeclareDocumentCommand{\semM}{s m}{%
+  \IfBooleanTF{#1}{%
+    \semP*[\Model]{#2}%
+  }{%
+    \semP[\Model]{#2}%
+  }%
+}
+%\DeclarePairedDelimiterXPP{\semM}[1]{}{\llbracket}{\rrbracket}{_{\Model}}{#1}
+\DeclarePairedDelimiterXPP{\semN}[1]{}{\llbracket}{\rrbracket}{_{\ModelN}}{#1}
+
+%% Sets
+\DeclarePairedDelimiter{\set}{\{}{\}}
+\DeclarePairedDelimiterX{\setDef}[2]{\{}{\}}{#1 \; \delimsize| \; #2}
+\newcommand*{\Single}{\mathbbm{1}}
+\newcommand*{\PVar}{\mathrm{PVar}}
+\newcommand*{\Var}{\mathrm{Var}}
+\newcommand*{\UVar}{\mathrm{UVar}}
+\newcommand*{\PForm}{\mathrm{PForm}}
+\newcommand*{\Forms}{\mathrm{Form}}
+\newcommand*{\FormsE}{\cramped{\mathrm{Form}^{=}}}
+\newcommand*{\Term}{\mathrm{Term}}
+\newcommand*{\unit}{\mathrm{()}}
+
+%% Propositional Logic
+\newcommand*{\Sub}{\mathrm{Sub}}
+
+%% Signatures
+\newcommand*{\Lang}{\mathcal{L}}
+\newcommand*{\LangE}{\mathcal{L}^{=}}
+\newcommand*{\FSym}{\mathcal{F}}
+\newcommand*{\PSym}{\mathcal{R}}
+\newcommand*{\ar}{\mathrm{ar}}
+
+%% Arithmetic signature
+\newcommand*{\sym}[1]{\underline{#1}}
+\newcommand*{\zero}{\sym{0}}
+\newcommand*{\one}{\sym{1}}
+
+%% Free and bound variables
+\newcommand*{\var}{\mathrm{var}}
+\newcommand*{\fv}{\mathrm{fv}}
+\newcommand*{\bv}{\mathrm{bv}}
+
+%% De Bruijn indices
+\newcommand*{\dBName}[1]{\textcolor{blue}{\langle #1 \rangle}}
+
+%% Freshness
+\newcommand*{\fresh}[2]{#1 \mathrel{\#} #2}
+
+%% Substitutions and valuations
+\newcommand*{\update}[2]{[#1 \colonequals #2]}
+% \newcommand*{\appS}[2]{#1 \, #2}
+\NewDocumentCommand{\appS}{s m m}{%
+  \IfBooleanTF{#1}{#2 #3}{#2 \, #3}%
+}
+\NewDocumentCommand{\Val}{o m}{%
+  \mathrm{Val}%
+  \IfValueT{#1}{_{#1}}%
+  (#2)
+}
+\newcommand*{\ValM}[1]{\Val[\Model]{#1}}
+\newcommand*{\updateV}[2]{[#1 \, \mapsto #2]}
+\newcommand*{\scomp}{\mathbin{\bullet}}
+\DeclareMathOperator{\supp}{supp}
+\newcommand*{\ueq}{\stackrel{?}{=}}
+\newcommand*{\uv}[1]{{?#1}}
+
+
+%% Sequents
+\newcommand*{\lIn}{\mathrel{:}}
+% Usage: \seq[\Delta]{\Gamma}{\phi}
+% or \seq{\Gamma}{\phi}
+\NewDocumentCommand{\seq}{o m m}{
+  \IfValueT{#1}{#1 \mid}%
+  #2 \vdash #3
+}
+
+\NewDocumentCommand{\ufseq}{O{\Gamma} m}{
+  #1 \vdash_{u} #2
+}
+
+%% Proof systems
+\newcommand*{\upbf}[1]{\textup{\textbf{#1}}}
+\newcommand*{\ND}{\textcolor{violet}{\upbf{ND}}}
+\newcommand*{\cND}{\textcolor{red}{\upbf{cND}}}
+\newcommand*{\NDF}{\textcolor{violet}{\upbf{ND}$_{1}$}}
+\newcommand*{\NDFe}{\textcolor{violet}{\upbf{ND}$_{1}^{=}$}}
+\newcommand*{\cNDF}{\textcolor{red}{\upbf{cND}$_{1}$}}
+\newcommand*{\cNDFe}{\textcolor{red}{\upbf{cND}$_{1}^{=}$}}
+
+\newcommand*{\PLabel}[1]{\textup{(#1)}}
+\newcommand*{\Ax}{\PLabel{Assum}}
+\newcommand*{\IAnd}{\PLabel{$\land$I}}
+\newcommand*{\EAnd}[1]{\PLabel{$\land$E$_{#1}$}}
+\newcommand*{\LEAnd}{\EAnd{1}}
+\newcommand*{\REAnd}{\EAnd{2}}
+\newcommand*{\IImpl}{\PLabel{$\to$I}}
+\newcommand*{\EImpl}{\PLabel{$\to$E}}
+\newcommand*{\EOr}{\PLabel{$\lor$E}}
+\newcommand*{\IOr}[1]{\PLabel{$\lor$I$_{#1}$}}
+\newcommand*{\LIOr}{\IOr{1}}
+\newcommand*{\RIOr}{\IOr{2}}
+\newcommand*{\EBot}{\PLabel{$\bot$E}}
+\newcommand*{\ITop}{\PLabel{$\top$I}}
+\newcommand*{\INeg}{\PLabel{$\neg$I}}
+\newcommand*{\ENeg}{\PLabel{$\neg$E}}
+\newcommand*{\EDNeg}{\PLabel{$\neg\neg$E}}
+\newcommand*{\Contra}{\PLabel{Contra}}
+\newcommand*{\IAll}{\PLabel{$\forall$I}}
+\newcommand*{\EAll}{\PLabel{$\forall$E}}
+\newcommand*{\IEx}{\PLabel{$\exists$I}}
+\newcommand*{\EEx}{\PLabel{$\exists$E}}
+\newcommand*{\IUEx}{\PLabel{$\exists!$I}}
+\newcommand*{\EUEx}{\PLabel{$\exists!$E}}
+\newcommand*{\BackCh}{\PLabel{B}}
+\newcommand*{\Cut}{\PLabel{Cut}}
+\newcommand*{\Refl}{\PLabel{Refl}}
+\newcommand*{\Trans}{\PLabel{Trans}}
+\newcommand*{\Sym}{\PLabel{Sym}}
+\newcommand*{\Repl}{\PLabel{Repl}}
+\newcommand*{\Str}{\PLabel{Str}}
+
+% Add custom Fitch commands
+\newcommand{\myrules}{%
+  % \ndrules
+  \def\ii{\by{$\to$I}}%
+  \def\ie{\by{$\to$E}}%
+  \def\Ai{\by{$\forall$I}}%
+  \def\Ae{\by{$\forall$E}}%
+  \def\Ei{\by{$\exists$I}}%
+  \def\Ee{\by{$\exists$E}}%
+  \def\ai{\by{$\land$I}}%
+  \def\ae{\by{$\land$E}}%
+  \def\oi{\by{$\lor$I}}%
+  \def\oe{\by{$\lor$E}}%
+  \def\ni{\by{$\neg$I}}%
+  \def\ne{\by{$\neg$E}}%
+  \def\be{\by{$\bot$E}}%
+  \def\nne{\by{$\neg\neg$E}}%
+  \def\r{\by{R}}%
+  \def\contra{\by{Contra}}%
+  \def\assum{\by{Assum}}%
+  \def\refl{\by{Refl}}%
+  \def\repl{\by{Repl}}%
+  \def\symm{\by{Sym}}%
+  \def\trans{\by{Trans}}%
+  \def\Ue{\by{$\exists!$E}}%
+  \def\Ui{\by{$\exists!$I}}%
+  \def\backch{\by{B}}%
+}
+
+% Proofs
+\newcommand*{\Prf}{\mathrm{Pr}}
+
+%% Procedures
+\newcommand*{\IFree}{\texttt{IMPL\_FREE}}
+\newcommand*{\NNF}{\texttt{NNF}}
+\newcommand*{\Distr}{\texttt{DISTR}}
+\newcommand*{\Horn}{\texttt{HornSat}}
+
+
+%% FOL semantics
+\newcommand*{\Model}{\mathcal{M}}
+\newcommand*{\ModelN}{\mathcal{N}}
+\newcommand*{\Univ}[1][\Model]{\abs*{#1}}
+\newcommand*{\symInt}[2][\Model]{#1(#2)}
+\newcommand*{\Given}{G}
+\newcommand*{\ArithM}{\Model_{\raisemath{1pt}{\!a}}}
+\newcommand*{\ArithU}{\Univ[\ArithM]}
+\newcommand*{\arithInt}[1]{\symInt[\ArithM]{#1}}
+\newcommand*{\LangM}{\Model_{\raisemath{1pt}{\!l}}}
+\newcommand*{\LangU}{\Univ[\LangM]}
+\newcommand*{\langInt}[1]{\symInt[\LangM]{#1}}
+
+
+%% Languages
+\newcommand*{\eword}{\varepsilon}
+\newcommand*{\Words}[1]{#1^{\ast}}
+\newcommand*{\Langs}[1]{\Pow \parens*{\Words{#1}}}
+\newcommand*{\wlen}{\mathrm{length}}
+\newcommand*{\conc}{\mathbin{+\!\!\!+}}
+
+%% Typesetting LaTeX commands
+\newcommand*{\latexCmd}[1]{\texttt{\textbackslash #1}}
+
+%% Vending machines
+\newcommand*{\CmdP}{\mathrm{Cmd}}
+\newcommand*{\ProdP}{\mathrm{Prod}}
+\newcommand*{\StP}{\mathrm{St}}
+\newcommand*{\coinF}{\mathrm{coin}}
+\newcommand*{\selF}{\mathrm{sel}}
+
+%% Groups and arithmetic
+\newcommand*{\gplus}{\dotplus}
+\newcommand*{\gzero}{\dot{0}}
+\newcommand*{\doubleInj}{\phi_{\text{double-inj}}}
+\DeclareMathOperator{\even}{even}
+\DeclareMathOperator{\odd}{odd}
+
+% Higher-order reasoning
+\DeclareMathOperator{\App}{app}
+\DeclareMathOperator{\Abs}{abs}
+% \DeclareMathOperator{\pair}{pair}
+\newcommand*{\Fun}{\mathrm{Fun}}
+
+%% Robot
+\newcommand*{\posF}{\mathrm{pos}}
+\newcommand*{\mkpos}[2]{\posF(\sym{#1}, \sym{#2})}
+
+%% Horn clauses and uniform proofs
+\newcommand*{\Goal}{\mathrm{Goal}}
+
+%% Computation and Primitive Recursion
+\newcommand*{\dc}{{\uparrow}}
+\newcommand*{\pN}{\overline{\N}}
+\newcommand*{\enc}{\mathrm{enc}}
+\newcommand*{\dec}{\mathrm{dec}}
+\newcommand*{\chk}{\mathrm{chk}}
+
+\newcommand*{\PR}{\mathrm{PR}}
+\DeclareDocumentCommand{\Z}{o}{%
+  \mathrm{Z}\IfValueT{#1}{^{#1}}%
+}
+\DeclareDocumentCommand{\K}{o m}{%
+  \mathrm{K}\IfValueT{#1}{^{#1}_{#2}}%
+}
+\DeclareDocumentCommand{\P}{o m}{%
+  \Pi_{#2}\IfValueT{#1}{^{#1}}
+}
+\newcommand*{\Suc}{\mathrm{S}}
+\DeclareDocumentCommand{\C}{o m}{%
+  \mathrm{C}\IfValueT{#1}{^{#1}}\IfValueT{#2}{_{#2}}
+}
+\DeclareDocumentCommand{\I}{o}{%
+  \mathrm{I}\IfValueT{#1}{^{#1}}
+}
+
+\newcommand*{\PRTerms}{\sym{\mathrm{PR}}}
+\DeclareDocumentCommand{\ZS}{o}{%
+  \sym{\mathrm{Z}}\IfValueT{#1}{^{#1}}%
+}
+\DeclareDocumentCommand{\KS}{o m}{%
+  \sym{\mathrm{K}}\IfValueT{#1}{^{#1}_{#2}}%
+}
+\DeclareDocumentCommand{\PS}{o m}{%
+  \sym{\Pi}_{#2}\IfValueT{#1}{^{#1}}
+}
+\newcommand*{\SucS}{\sym{\Suc}}
+\DeclareDocumentCommand{\CS}{o m}{%
+  \sym{\mathrm{C}}\IfValueT{#1}{^{#1}}\IfValueT{#2}{_{#2}}
+}
+\DeclareDocumentCommand{\IS}{o}{%
+  \sym{\mathrm{I}}\IfValueT{#1}{^{#1}}
+}
+
+\newcommand{\pred}{\mathrm{pred}}
+
+\newcommand*{\StdCat}[1]{\mathbf{#1}}
+\newcommand*{\ModC}{\StdCat{Mod}}
+\DeclareDocumentCommand{\Mod}{o m}{%
+  \IfValueTF{#1}{(#1, #2)}{#2}%
+  \text{-}%
+  \ModC
+}
+\newcommand*{\ModS}{\ModC_{s}}
+\newcommand*{\EmbC}{\StdCat{Emb}}
+
+\newcommand*{\chiE}{\chi_{=}}
+\newcommand*{\mul}{\mathrm{mul}}
+\newcommand*{\rep}{\mathrm{rep}}
+\newcommand{\sgn}{\mathrm{sgn}}
+
+\def\dotminus{\mathbin{\ooalign{\hss\raise1ex\hbox{.}\hss\cr
+	\mathsurround=0pt$-$}}}
+
+% Star tells pb to reduce space between the pullback map and its argument
+\DeclareDocumentCommand{\pb}{s m d()}{%
+  #2^{\ast}%
+  \IfValueT{#3}{%
+    \IfBooleanT{#1}{\kern-0.1em}%
+    #3%
+  }%
+}
+
+\newcommand*{\pbM}[1]{\pb*{#1}(\Model)}
+
+\newcommand*{\PRA}{\mathrm{PRA}}
+\newcommand*{\LangPRA}{\Lang_{\PRA}}
+\newcommand*{\SymPRA}{\FSym_{\PRA}}
+\newcommand*{\ThPRA}{T_{\PRA}}
+\DeclareDocumentCommand{\code}{m}{%
+  {}^{\scriptscriptstyle\lceil}\mkern-1mu%
+  #1%
+  {}^{\scriptscriptstyle\rceil}}
+\newcommand*{\Prv}[1]{\mathrm{Pr}_{#1}}
+\newcommand*{\sub}{\mathrm{sub}}

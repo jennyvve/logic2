@@ -1,0 +1,56 @@
+% !TEX program = xelatex
+\documentclass{article}
+
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{unicode-math}
+\setmonofont{DejaVu Sans Mono} % monospaced font with extensive unicode support for verbatim
+\usepackage{stmaryrd}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{forest}
+\usepackage{logicproof}
+\usepackage{ebproof}
+\usepackage{fitch}
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%% Some macros to help with the typesetting %%%%%%%%%%
+\usepackage{logic-macros}
+%%%%%% End of local macros %%%%%%%
+
+\title{Logic Homework 1}
+\author{Jenny Vermeltfoort\\
+  s3787494\\
+  Informatica%Informatica, I&E, Bioinformatica, Wiskunde, ...
+}
+
+\begin{document}
+
+%% Use var symbols by default
+\renewcommand*{\phi}{\varphi}
+\renewcommand*{\epsilon}{\varepsilon}
+
+\maketitle
+
+\section*{Question 1}
+\begin{verbatim}
+1 ∀x. E(x) → O(s(x))  Premise
+2 b = s(a)            Premise
+3 E(a)                Premise
+4 E(a) → O(s(a))      ∀E, 1
+5 O(s(a))             →E, 4, 3
+6 b = b               =I
+7 s(a) = b            =E, 2, 6
+8 O(b)                =E, 7, 5
+\end{verbatim}
+
+\newcommand\myeq{\mathrel{\stackrel{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
+
+\section*{Question 2}
+\paragraph{a)}
+$ \phi  = \forall z : L(\underline{0}, z). \exists y : N. L(\underline{0}, d(x, s(y)))  \land L(d(x, s(y)), z) $
+
+\paragraph{b)}
+$ \psi =   \forall x. \forall y. \forall z: L(\underline{0}, z). L(d(x,y), z) \rightarrow x \dot{=} y$
+
+\end{document}
